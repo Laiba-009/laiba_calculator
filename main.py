@@ -124,8 +124,7 @@ st.caption("calculator")
 
 st.divider()
 
-if st.session_state.get("answer"):
-    st.success(st.session_state.answer)
+
 # Calculator input field
 st.text_input(
     "Enter calculation",
@@ -133,6 +132,12 @@ st.text_input(
 
     on_change=calculate
 )
+def calculate():
+    try:
+        result = eval(st.session_state.expression)
+        st.session_state.expression = str(result)
+    except:
+        st.session_state.expression = "Error"
 
 
 # First button row
