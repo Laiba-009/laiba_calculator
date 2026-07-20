@@ -44,11 +44,12 @@ def calculate_percentage():
         if result.is_integer():
             result = int(result)
 
+        # Show result in the same input box
         st.session_state.expression = str(result)
         st.session_state.answer = str(result)
 
     except ValueError:
-        st.session_state.answer = "Error: Enter one number before pressing %."
+        st.session_state.expression = "Error"
 
 
 # Calculate sine using degrees
@@ -70,9 +71,8 @@ def tan_degree(number):
 def calculate():
     expression = st.session_state.expression
 
-    # Check if the input is empty
+    # Do nothing if the input is empty
     if expression.strip() == "":
-        st.session_state.answer = "Please enter a calculation."
         return
 
     try:
@@ -107,13 +107,15 @@ def calculate():
         if isinstance(result, float) and result.is_integer():
             result = int(result)
 
+        # Show result in the same input box
+        st.session_state.expression = str(result)
         st.session_state.answer = str(result)
 
     except ZeroDivisionError:
-        st.session_state.answer = "Error: Division by zero is not allowed."
+        st.session_state.expression = "Error: Division by zero"
 
     except Exception:
-        st.session_state.answer = "Error: Please enter a valid expression."
+        st.session_state.expression = "Error"
 
 
 # Display the main heading
@@ -129,11 +131,8 @@ st.divider()
 st.text_input(
     "Enter calculation",
     key="expression",
-
     on_change=calculate
-
 )
-
 
 
 # First button row
@@ -419,11 +418,3 @@ with column4:
         type="primary",
         use_container_width=True
     )
-# Display the result
-st.divider()
-
-st.subheader("Result")
-
-
-
-
