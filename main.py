@@ -131,10 +131,9 @@ st.text_input(
     key="expression",
 
     on_change=calculate
-    
 
 )
-st.session_state.expression = str(result)
+
 
 
 # First button row
