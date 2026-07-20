@@ -129,7 +129,7 @@ st.divider()
 st.text_input(
     "Enter calculation",
     key="expression",
-    placeholder="Example: sin(30) + sqrt(16)",
+   
     on_change=calculate
 )
 
