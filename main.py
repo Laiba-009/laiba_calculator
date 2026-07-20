@@ -124,12 +124,13 @@ st.caption("calculator")
 
 st.divider()
 
-
+if st.session_state.get("answer"):
+    st.success(st.session_state.answer)
 # Calculator input field
 st.text_input(
     "Enter calculation",
     key="expression",
-   
+
     on_change=calculate
 )
 
@@ -422,6 +423,6 @@ st.divider()
 
 st.subheader("Result")
 
-st.info(st.session_state.answer)
+
 
 
