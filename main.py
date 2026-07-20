@@ -131,19 +131,10 @@ st.text_input(
     key="expression",
 
     on_change=calculate
+    
 
 )
-def calculate():
-    expression = st.session_state.expression
-
-    if not expression:
-        return
-
-    try:
-        result = eval(expression)
-        st.session_state.expression = str(result)
-    except:
-        st.session_state.expression = "Error"
+st.session_state.expression = str(result)
 
 
 # First button row
