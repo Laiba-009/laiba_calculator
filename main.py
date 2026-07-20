@@ -1,4 +1,5 @@
 import math
+import re
 import streamlit as st
 
 
@@ -69,10 +70,10 @@ def tan_degree(number):
 
 # Calculate the entered mathematical expression
 def calculate():
-    expression = st.session_state.expression
+    expression = st.session_state.expression.strip()
 
     # Do nothing if the input is empty
-    if expression.strip() == "":
+    if expression == "":
         return
 
     try:
@@ -80,6 +81,39 @@ def calculate():
         expression = expression.replace("^", "**")
         expression = expression.replace("×", "*")
         expression = expression.replace("÷", "/")
+        expression = expression.replace(" ", "")
+
+        # Convert functions without brackets
+        # Examples:
+        # sin30 becomes sin(30)
+        # sqrt16 becomes sqrt(16)
+        expression = re.sub(
+            r"\b(sin|cos|tan|sqrt|log|ln|exp)(-?\d+(?:\.\d+)?)",
+            r"\1(\2)",
+            expression
+        )
+
+        # Add multiplication automatically
+        # Example: 23sin(30) becomes 23*sin(30)
+        expression = re.sub(
+            r"(\d|\))(?=(sin|cos|tan|sqrt|log|ln|exp)\()",
+            r"\1*",
+            expression
+        )
+
+        # Example: 2pi becomes 2*pi
+        expression = re.sub(
+            r"(\d|\))(?=(pi|e)\b)",
+            r"\1*",
+            expression
+        )
+
+        # Example: 2(3+4) becomes 2*(3+4)
+        expression = re.sub(
+            r"(\d|\))(?=\()",
+            r"\1*",
+            expression
+        )
 
         # Mathematical functions allowed in the calculator
         allowed_functions = {
@@ -106,6 +140,10 @@ def calculate():
         # Remove .0 from whole number results
         if isinstance(result, float) and result.is_integer():
             result = int(result)
+
+        # Round long decimal results
+        if isinstance(result, float):
+            result = round(result, 10)
 
         # Show result in the same input box
         st.session_state.expression = str(result)
@@ -176,7 +214,7 @@ with column1:
     st.button(
         "sin",
         on_click=add_value,
-        args=("sin(",),
+        args=("sin",),
         use_container_width=True
     )
 
@@ -184,7 +222,7 @@ with column2:
     st.button(
         "cos",
         on_click=add_value,
-        args=("cos(",),
+        args=("cos",),
         use_container_width=True
     )
 
@@ -192,7 +230,7 @@ with column3:
     st.button(
         "tan",
         on_click=add_value,
-        args=("tan(",),
+        args=("tan",),
         use_container_width=True
     )
 
@@ -200,7 +238,7 @@ with column4:
     st.button(
         "√",
         on_click=add_value,
-        args=("sqrt(",),
+        args=("sqrt",),
         use_container_width=True
     )
 
@@ -212,7 +250,7 @@ with column1:
     st.button(
         "log",
         on_click=add_value,
-        args=("log(",),
+        args=("log",),
         use_container_width=True
     )
 
@@ -220,7 +258,7 @@ with column2:
     st.button(
         "ln",
         on_click=add_value,
-        args=("ln(",),
+        args=("ln",),
         use_container_width=True
     )
 
@@ -407,7 +445,7 @@ with column3:
     st.button(
         "exp",
         on_click=add_value,
-        args=("exp(",),
+        args=("exp",),
         use_container_width=True
     )
 
